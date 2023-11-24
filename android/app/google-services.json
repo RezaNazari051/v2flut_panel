@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "365415055847",
+    "project_id": "test-yo-panel",
+    "storage_bucket": "test-yo-panel.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:365415055847:android:2f3fa7e757301cdd60fd42",
+        "android_client_info": {
+          "package_name": "com.example.yo_panel"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1Y1is1W9m1I17Q2J7EDYTo4FUV6emJZk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
