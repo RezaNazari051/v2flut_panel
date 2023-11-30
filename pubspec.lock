@@ -49,6 +49,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
+  auto_animated:
+    dependency: "direct main"
+    description:
+      name: auto_animated
+      sha256: f62311033d043d2709c25444551debdfd08649138c2923b0298d776792291149
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.0"
   auto_size_text:
     dependency: "direct main"
     description:
@@ -894,18 +902,18 @@ packages:
     dependency: transitive
     description:
       name: syncfusion_flutter_core
-      sha256: "6f3056c548f4e039a8994904836881753c4c7643cd2142d3c226fcb45ec200fe"
+      sha256: "88366a5e95ccb4091feb531021567f76ed3ceddab7424de02a9ac4a335d22a44"
       url: "https://pub.dev"
     source: hosted
-    version: "23.1.44"
+    version: "23.2.6"
   syncfusion_flutter_datagrid:
     dependency: "direct main"
     description:
       name: syncfusion_flutter_datagrid
-      sha256: "34cbb03ed34851a9b9723822a43374445b2a5b8f0e8c00f2d52fd0669e37b3a6"
+      sha256: "8246db9f6c24cf01513842b29a39c0fd86aa18756b81661c99a4d2881bfa9338"
       url: "https://pub.dev"
     source: hosted
-    version: "23.1.44"
+    version: "23.2.6"
   talker:
     dependency: transitive
     description:
@@ -978,6 +986,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+  visibility_detector:
+    dependency: transitive
+    description:
+      name: visibility_detector
+      sha256: dd5cc11e13494f432d15939c3aa8ae76844c42b723398643ce9addb88a5ed420
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.0+2"
   watcher:
     dependency: transitive
     description:

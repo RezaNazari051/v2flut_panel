@@ -11,7 +11,11 @@ class WalletInfoCardWidget extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-          color: backgroundColor, borderRadius: BorderRadius.circular(5)),
+        // boxShadow: [
+        //   BoxShadow(color: AppColor.testGrayBackgroundColor.withOpacity(.5),blurRadius: 5,spreadRadius:1,)
+        // ],
+        border: Border.all(color: AppColor.testGrayBackgroundColor,width: 2),
+          color: backgroundColor, borderRadius: BorderRadius.circular(10)),
       padding: const EdgeInsets.symmetric(
         vertical: 5,
         horizontal: 5,

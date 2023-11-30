@@ -130,9 +130,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
               headingTextStyle: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontFamily: 'IranYekan'),
+                  fontFamily: 'IranSans'),
               dataTextStyle:
-              const TextStyle(color: Colors.white, fontFamily: 'IranYekan'),
+              const TextStyle(color: Colors.white, fontFamily: 'IranSans'),
               columns: const [
                 DataColumn2(
                     size: ColumnSize.M,
@@ -237,9 +237,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
               headingTextStyle: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontFamily: 'IranYekan'),
+                  fontFamily: 'IranSans'),
               dataTextStyle:
-                  const TextStyle(color: Colors.white, fontFamily: 'IranYekan'),
+                  const TextStyle(color: Colors.white, fontFamily: 'IranSans'),
 
               // minWidth: 200,
               // columnSpacing: 0,

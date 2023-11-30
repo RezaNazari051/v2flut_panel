@@ -1,55 +1,70 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:yo_panel/config/theme/app_colors.dart';
 import 'package:yo_panel/core/blocs/cubit/side_bar_cubit.dart';
 
-class AppSideBar extends StatelessWidget {
-  const AppSideBar({super.key});
+class AppSideBar extends StatefulWidget {
+  const AppSideBar({super.key, required this.pageController});
+
+  final PageController pageController;
+
+  @override
+  State<AppSideBar> createState() => _AppSideBarState();
+}
+
+class _AppSideBarState extends State<AppSideBar> {
+
 
   @override
   Widget build(BuildContext context) {
-      List<SideBarItemData> items = [
-    SideBarItemData(
+    List<SideBarItemData> items = [
+      SideBarItemData(
         title: 'داشبورد',
-        leadingIcon: Icons.dashboard_outlined,
-        selectedleadingIcon: Icons.dashboard),
-    SideBarItemData(
+          // title: '',
+          leadingIcon: Icons.dashboard_outlined,
+          selectedleadingIcon: Icons.dashboard),
+      SideBarItemData(
         title: 'کاربران',
-        leadingIcon: Icons.person_outline,
-        selectedleadingIcon: Icons.person),
-    SideBarItemData(
+          // title: '',
+          leadingIcon: Icons.person_outline,
+          selectedleadingIcon: Icons.person),
+      SideBarItemData(
         title: 'تنظیمات',
-        leadingIcon: Icons.settings_outlined,
-        selectedleadingIcon: Icons.settings),
-  ];
+          // title: '',
+          leadingIcon: Icons.settings_outlined,
+          selectedleadingIcon: Icons.settings),
+    ];
     return Container(
-      width:250,
+      width: 250,
       decoration: const BoxDecoration(
-        color:AppColor.darkCardBackgroundColor
+          color: AppColor.testSideBarBackgroundColor
       ),
       child: Column(
         children: [
           const Gap(20),
           Expanded(child: BlocBuilder<SideBarCubit, int>(
             builder: (context, state) {
-          final int selectedIndex = context.read<SideBarCubit>().state;
-              return ListView.builder(
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  return SideBarListItem(
-                      title: items[index].title,
-                      ontap: () {
-                          if (selectedIndex != index) {
-                            BlocProvider.of<SideBarCubit>(context).changePageIndex(index);
-                          }
-                      },
-                      selectedLeadingIcon: items[index].selectedleadingIcon,
-                      leadingIcon: items[index].leadingIcon,
-                      isSelectedItem: selectedIndex == index);
-                },
-              );
+              final int selectedIndex = context
+                  .read<SideBarCubit>()
+                  .state;
+
+              return ListView.builder(itemBuilder:  (context, index) {
+                return SideBarListItem(
+                    title: items[index].title,
+                    ontap: () {
+                      if (selectedIndex != index) {
+                        BlocProvider.of<SideBarCubit>(context)
+                            .changePageIndex(index);
+                        widget.pageController.animateToPage(index,
+                            duration: const Duration(microseconds: 300),
+                            curve: Curves.ease);
+                      }
+                    },
+                    selectedLeadingIcon: items[index].selectedleadingIcon,
+                    leadingIcon: items[index].leadingIcon,
+                    isSelectedItem: selectedIndex == index);
+              }, itemCount:items.length);
             },
           ))
         ],
@@ -57,7 +72,6 @@ class AppSideBar extends StatelessWidget {
     );
   }
 }
-
 class SideBarListItem extends StatelessWidget {
   const SideBarListItem({
     super.key,
@@ -68,6 +82,7 @@ class SideBarListItem extends StatelessWidget {
     required this.isSelectedItem,
     this.leadingWidget,
   });
+
   final String title;
   final Function() ontap;
   final IconData leadingIcon;
@@ -85,10 +100,10 @@ class SideBarListItem extends StatelessWidget {
         contentPadding: EdgeInsets.zero,
         leading: isSelectedItem
             ? Container(
-                width: 5,
-                height: double.infinity,
-                color: Colors.white,
-              )
+          width: 5,
+          height: double.infinity,
+          color: Colors.white,
+        )
             : const SizedBox.shrink(),
         title: Row(
           children: [
@@ -109,11 +124,11 @@ class SideBarListItem extends StatelessWidget {
 }
 
 class SideBarItemData {
-  SideBarItemData(
-      {required this.title,
-      required this.leadingIcon,
-      required this.selectedleadingIcon,
-      this.leadingWidget});
+  SideBarItemData({required this.title,
+    required this.leadingIcon,
+    required this.selectedleadingIcon,
+    this.leadingWidget});
+
   final String title;
   final IconData leadingIcon;
   final IconData selectedleadingIcon;

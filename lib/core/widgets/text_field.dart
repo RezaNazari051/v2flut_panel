@@ -67,13 +67,14 @@ class AppTextFormField extends StatelessWidget {
               validator:_textFunction ,
               controller: _controller,
               keyboardType: _textInputType,
-              style: const TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.white,fontSize: 20),
               decoration: InputDecoration(
-                isDense: true,
-                filled: true,
+                filled: true
+                ,
+                // contentPadding: const EdgeInsets.only(bottom: 80,right: 20,left: 20),
                 fillColor: _fillColor,
                 hintStyle: const TextStyle(
-                  color: Color(0xff8692A6),
+                  // color: Color(0xff8692A6),
                 ),
                 hintText: _hintText,
                 border: OutlineInputBorder(

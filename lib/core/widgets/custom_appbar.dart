@@ -31,7 +31,7 @@ class CustomAppBar extends StatelessWidget {
     final isDesktop = Responsive.isDesktop(context);
     return Container(
       decoration: const BoxDecoration(
-          color: AppColor.darkCardBackgroundColor,
+          color: AppColor.testSideBarBackgroundColor,
           border: Border(bottom: BorderSide(color: AppColor.grayColor))),
       height: 70,
       child: Row(
