@@ -1,9 +1,21 @@
+import 'package:data_grid/data_grid.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:yo_panel/config/theme/app_colors.dart';
+import 'package:yo_panel/core/params/get_users_params.dart';
+import 'package:yo_panel/features/user/data/models/user_model.dart';
+import 'package:yo_panel/features/user/domain/entities/user_entity.dart';
+import 'package:yo_panel/features/user/presentation/bloc/get_users_status.dart';
+import 'package:yo_panel/features/user/presentation/bloc/user_bloc.dart';
+
+import '../../../../core/utils/dialogs.dart';
 
 class UsersScreen extends StatefulWidget {
   const UsersScreen({super.key});
@@ -14,227 +26,247 @@ class UsersScreen extends StatefulWidget {
 
 class _UsersScreenState extends State<UsersScreen> {
   late ScrollController scrollController;
+  late PlutoGridStateManager stateManager;
 
   @override
   void initState() {
+    BlocProvider.of<UserBloc>(context)
+        .add(GetAllUserEvent(GetUsersParams(sortType: 'ASC', page: 8)));
+
     scrollController = ScrollController();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<SampleUser> sampleData = List.generate(
-        5,
-        (index) => SampleUser(
-            id: 1,
-            name: 'mohammadrezamohammadi',
-            plan: '20 گیگ 1 ماهه 70ت',
-            usedVolume: '15 گیگ',
-            expireDate: '25 آذر 1402',
-            remainingVolume: '50 گیگ',
-            totalVolume: '20 گیگ',
-            isBanned: true,
-            isOnline: true));
-    final GridDataSource dataSource = GridDataSource(sampleData);
-    print('users screen is build');
-    return Scaffold(
+    final horizontalScrollController = ScrollController();
 
-        body: SfDataGridTheme(
-      data: SfDataGridThemeData(gridLineColor: AppColor.grayColor),
-      child: SfDataGrid(
-          horizontalScrollController: scrollController,
-          // defaultCo  lumnWidth: 150,
+    return Shortcuts(
+      shortcuts: {
+        LogicalKeySet(LogicalKeyboardKey.numpadAdd):VoidCallbackIntent(() {
+    AppDialog.showQrCodeDialog(context, content:' content');
+    }),
 
-          gridLinesVisibility: GridLinesVisibility.horizontal,
-          headerGridLinesVisibility: GridLinesVisibility.horizontal,
-          showHorizontalScrollbar: true,
-          showVerticalScrollbar: true,
-          columnWidthMode: ColumnWidthMode.fitByCellValue,
-          source: dataSource,
-          columns: [
-            GridColumn(
-                width: 100,
-                columnName: 'id',
-                label: const Center(
-                    child: Text(
-                  'شماره اکانت',
-                  style: TextStyle(color: Colors.white),
-                ))),
-            GridColumn(
-                columnName: 'name',
-                label: const Center(
-                    child: Text('نام کاربر',
-                        style: TextStyle(color: Colors.white)))),
-            GridColumn(
-                columnName: 'plan',
-                label: const Center(
-                    child: Text('پلن',
-                        style: TextStyle(color: Colors.white)))),
-            GridColumn(
-                width: 150,
-                columnName: 'daysLeft',
-                label: const Center(
-                    child: Text('زمان باقی مانده (روز)',
-                        style: TextStyle(color: Colors.white)))),
-            GridColumn(
-                width: 150,
-                columnName: 'remainingVolume',
-                label: const Center(
-                    child: Text('حجم باقی مانده',
-                        style: TextStyle(color: Colors.white)))),
-            GridColumn(
-                width: 150,
-                columnName: 'usedVolume',
-                label: const Center(
-                    child: Text('حجم مصرف شده',
-                        style: TextStyle(color: Colors.white)))),
-            GridColumn(
-                width: 150,
-                columnName: 'expireDate',
-                label: const Center(
-                    child: Text('تاریخ انقضا',
-                        style: TextStyle(color: Colors.white)))),
-            GridColumn(
-                columnName: 'isBanned',
-                label: const Center(
-                    child: Text('وضعیت',
-                        style: TextStyle(color: Colors.white)))),
-            GridColumn(
-                width: 300,
-                columnName: 'operation',
-                label: const Center(
-                    child: Text('عملیات',
-                        style: TextStyle(color: Colors.white)))),
-            // GridColumn(columnName: 'id', label: Text('عملیات')),
-            // DataColumn2(label: Text('شماره اکانت'),),
-            // DataColumn2(label: Text('نام کاربر'),),
-            // DataColumn2(label: Text('پلن')),
-            // DataColumn2(label: Text('زمان باقی مانده (روز)')),
-            // DataColumn2(label: Text('حجم باقی مانده')),
-            // DataColumn2(label: Text('حجم مصرف شده')),
-            // DataColumn2(label: Text('تاریخ انقضا')),
-            // DataColumn2(label: Text('وضعیت')),
-            // DataColumn2(label: Text('عملیات')),
-          ]),
-    ));
-  }
-}
+      },
+      child: Scaffold(
+          body: SelectionArea(
+        child: BlocConsumer<UserBloc, UserState>(
+          listener: (context, state) {},
+          builder: (context, state) {
+            if (state.usersStatus is GetUserLoading) {
+              return const Center(
+                child: CupertinoActivityIndicator(),
+              );
+            }
+            if (state.usersStatus is GetUserCompleted) {
+              final GetUserCompleted getUserCompleted =
+                  state.usersStatus as GetUserCompleted;
+              final UserEntity userEntity = getUserCompleted.userEntity;
 
-class GridDataSource extends DataGridSource {
-  GridDataSource(List<SampleUser> sampleUsers) {
-    _users = sampleUsers
-        .map((e) => DataGridRow(cells: [
-              DataGridCell(columnName: 'id', value: e.id),
-              DataGridCell(columnName: 'name', value: e.name),
-              DataGridCell(columnName: 'plan', value: e.plan),
-              DataGridCell(columnName: 'daysLeft', value: e.daysLeft),
-              DataGridCell(
-                  columnName: 'remainingVolume', value: e.remainingVolume),
-              DataGridCell(columnName: 'usedVolume', value: e.usedVolume),
-              DataGridCell(columnName: 'expireDate', value: e.expireDate),
-              // DataGridCell(columnName: 'totalVolume', value: e.totalVolume),
-              DataGridCell(columnName: 'isBanned', value: e.isBanned),
-              DataGridCell(columnName: 'operation', value: e.isBanned),
-              // DataGridCell(columnName: 'isOnline', value: e.isOnline),
-            ]))
-        .toList();
-  }
+              /// columnGroups that can group columns can be omitted.
+              final List<PlutoColumnGroup> columnGroups = [
+                PlutoColumnGroup(
+                    title: 'Id', fields: ['id'], expandedColumn: true),
+                PlutoColumnGroup(
+                    title: 'User information', fields: ['name', 'age']),
+                PlutoColumnGroup(title: 'Status', children: [
+                  PlutoColumnGroup(
+                      title: 'A', fields: ['role'], expandedColumn: true),
+                  PlutoColumnGroup(
+                      title: 'Etc.', fields: ['joined', 'working_time']),
+                ]),
+              ];
+              return SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 20),
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
 
-  List<DataGridRow> _users = [];
-
-  @override
-  List<DataGridRow> get rows => _users;
-
-  @override
-  DataGridRowAdapter? buildRow(DataGridRow row) {
-    // TODO: implement buildRow
-    return DataGridRowAdapter(
-        cells: row
-            .getCells()
-            .map(
-              (dataGridCell) {
-                if(dataGridCell.columnName=='operation'){
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(onPressed: (){}, child:Text('کپی لینک',style: TextStyle(color: Colors.white),),
-                      style: ElevatedButton.styleFrom(backgroundColor: AppColor.grayColor),
-                      ),
-                      IconButton(onPressed: (){}, icon:const Icon(CupertinoIcons.qrcode,color: AppColor.grayColor,),
-                      tooltip: 'اسکن qr code',),
-
-                      IconButton(onPressed: (){}, icon:const Icon(CupertinoIcons.pen,color: AppColor.grayColor,),
-                      tooltip: 'بازنشانی لینک اشتراک',),
-
-                      IconButton(onPressed: (){}, icon:const Icon(CupertinoIcons.chart_bar_alt_fill,color: AppColor.grayColor,),
-                      tooltip: 'مشاهده جزییات مصرف',),
-
-                    ],
-                  );
-                }
-                else if (dataGridCell.columnName=='isBanned'){
-                  return  Center(
-                    child: CupertinoSwitch(
-                                    value: !dataGridCell.value,
-                                    // value: false,
-                                    trackColor: Colors.red,
-                                    onChanged: (value) {},
-                                    ),
-                );
-
-                }
-                else{
-                  return Center(
-                    child: Text(
-                      dataGridCell.value.toString(),
-                      style: const TextStyle(color: Colors.white),
+                            backgroundColor: Colors.white
+                          ),
+                          onPressed: (){
+                          }, child:const Text('افزودن کاربر')),
                     ),
-                  );
-                }
-                // return dataGridCell.columnName == 'isBanned'
-                //   ? Tooltip(
-                //       message: !dataGridCell.value ? 'فعال' : 'مسدود',
-                //       child: CupertinoSwitch(
-                //         value: !dataGridCell.value,
-                //         // value: false,
-                //         trackColor: Colors.red,
-                //         onChanged: (value) {},
-                //       ),
-                //     )
-                //   : Center(
-                //       child: Text(
-                //         dataGridCell.value.toString(),
-                //         style: const TextStyle(color: Colors.white),
-                //       ),
-                //     );
-              },
-            )
-            .toList());
+                    Scrollbar(
+                      controller: horizontalScrollController,
+                      scrollbarOrientation: ScrollbarOrientation.bottom,
+                      thumbVisibility: true,
+                      trackVisibility: true,
+                      child: SingleChildScrollView(
+                        controller: horizontalScrollController,
+                        scrollDirection: Axis.horizontal,
+                        child: DataTable(
+                          dataRowMinHeight: 80,
+                          dataRowMaxHeight: 80,
+                          // sortColumnIndex: _sortColumnIndex.value,
+                          // sortAscending: _sortAscending.value,
+                          // onSelectAll: _dessertsDataSource.selectAll,
+                          columns: const [
+                            DataColumn(
+                              label: Text(
+                                'نام کاربر',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              // onSort: (columnIndex, ascending) =>
+                              // _sort<String>((d) => d.name, columnIndex, ascending),
+                            ),
+                            DataColumn(
+                              label:
+                                  Text('پلن', style: TextStyle(color: Colors.white)),
+                            ),
+                            DataColumn(
+                              label: Text('زمان باقی مانده(روز)',
+                                  style: TextStyle(color: Colors.white)),
+                            ),
+                            DataColumn(
+                              label: Text('حجم باقی مانده',
+                                  style: TextStyle(color: Colors.white)),
+                            ),
+                            DataColumn(
+                              label: Text('حجم مصرف شده',
+                                  style: TextStyle(color: Colors.white)),
+                            ),
+                            DataColumn(
+                              label: Text('تاریخ انقضا',
+                                  style: TextStyle(color: Colors.white)),
+                            ),
+                            DataColumn(
+                              label: Text('وضعیت',
+                                  style: TextStyle(color: Colors.white)),
+                            ),
+                            DataColumn(
+                              label: Text('عملیات',
+                                  style: TextStyle(color: Colors.white)),
+                            )
+                          ],
+                          rows: List.generate(
+                            10,
+                            (index) {
+                              return DataRow(
+                                cells: [
+                                  DataCell(Tooltip(
+                                    message:
+                                        'اخرین استفاده: ${userEntity.result![index]?.LastTimeOnline ?? 'تا به حال آنلاین نشده'}',
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          width: 5,
+                                          height: 5,
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color:
+                                                  userEntity.result![index]!.IsOnline
+                                                      ? Colors.green
+                                                      : Colors.red),
+                                        ),
+                                        const Gap(10),
+                                        Text(userEntity.result![index]!.Name),
+                                      ],
+                                    ),
+                                  )),
+                                  DataCell(Center(
+                                      child:
+                                          Text(userEntity.result![index]!.PlanName))),
+                                  DataCell(Center(
+                                    child: Text(userEntity.result![index]!.DaysLeft
+                                        .toString()),
+                                  )),
+                                  DataCell(Center(
+                                      child: Text(userEntity
+                                          .result![index]!.RemainingVolume))),
+                                  DataCell(Center(
+                                      child: Text(
+                                          userEntity.result![index]!.UsedVolume))),
+                                  DataCell(Center(
+                                    child: Text(userEntity.result![index]!.ExpireDate
+                                        .toString()),
+                                  )),
+                                  DataCell(Center(
+                                      child: DecoratedBox(
+                                          decoration: BoxDecoration(
+                                            color:
+                                                userEntity.result![index]!.IsActive ==
+                                                        'فعال'
+                                                    ? const Color(0xffddf4ea)
+                                                    : const Color(0xfffecaca),
+                                            borderRadius: BorderRadius.circular(5),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              userEntity.result![index]!.IsActive,
+                                              style: TextStyle(
+                                                  color: userEntity.result![index]!
+                                                              .IsActive ==
+                                                          'فعال'
+                                                      ? const Color(0xff5b7c68)
+                                                      : const Color(0xffdf4446),
+                                                  fontSize: 12),
+                                            ),
+                                          ))
+                                      // Tooltip(
+                                      //     message: !userEntity.result![index]!.IsBanned?'فعال':'غیرفعال',
+                                      //     child: CupertinoSwitch(value: !userEntity.result![index]!.IsBanned, onChanged:(value){},)),
+                                      )),
+                                  DataCell(
+                                    Row(
+                                      children: [
+                                        IconButton.filled(
+                                            onPressed: () {
+                                              AppDialog.showQrCodeDialog(context, content:userEntity.result![index]!.SubLink);
+
+                                            },
+                                            icon: const Icon(Icons.qr_code_rounded),
+                                            tooltip: 'نمایش qr code'),
+                                        const Gap(10),
+                                        IconButton.filled(
+                                          onPressed: () {},
+                                          icon: const Icon(Icons.edit),
+                                          tooltip: 'تغییرلینک اشتراک',
+                                        ),
+                                        const Gap(10),
+                                        IconButton.filled(
+                                          onPressed: () {},
+                                          icon: const Icon(Icons.article),
+                                          tooltip: 'مشاهده ریزمصرف کاربر',
+                                        ),
+                                        const Gap(10),
+                                        userEntity.result![index]!.CanEdit
+                                            ? IconButton.filled(
+                                                onPressed: () {},
+                                                icon: const Icon(Icons.exit_to_app),
+                                                tooltip: 'تمدید اشتراک',
+                                              )
+                                            : const SizedBox.shrink(),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            if (state.usersStatus is GetUserError) {
+              return Text('Error');
+            }
+            return Text('data');
+          },
+        ),
+      )),
+    );
   }
 }
 
-class SampleUser {
-  final int id;
-  final String name;
-  final String plan;
-  final int? daysLeft;
-  final String usedVolume;
-  final String remainingVolume;
-  final String totalVolume;
-  final String? expireDate;
-  final bool isBanned;
-  final bool isOnline;
-
-  SampleUser({
-    required this.id,
-    required this.name,
-    required this.plan,
-    this.daysLeft,
-    required this.usedVolume,
-    required this.remainingVolume,
-    required this.totalVolume,
-    this.expireDate,
-    required this.isBanned,
-    required this.isOnline,
-  });
-}
+//   }
+// }

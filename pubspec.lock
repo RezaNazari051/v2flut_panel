@@ -233,6 +233,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.3"
+  data_grid:
+    dependency: "direct main"
+    description:
+      name: data_grid
+      sha256: "053ab90059b3da1c154906a5be298778149deb6281825d8ace75c886c87ae21c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0"
   data_table_2:
     dependency: "direct main"
     description:
@@ -725,6 +733,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.6"
+  pluto_grid:
+    dependency: "direct main"
+    description:
+      name: pluto_grid
+      sha256: e77c34a33dd9d74abbe20ba1df96474dded150dd042c7f7495be1bc2c26bd37f
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.0.2"
   pool:
     dependency: transitive
     description:
@@ -733,6 +749,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.1"
+  pretty_qr_code:
+    dependency: "direct main"
+    description:
+      name: pretty_qr_code
+      sha256: "799fa8d5c605028302cb7debbf3f180ce56678c4927fb2ecc4b174a3bee526d6"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
   provider:
     dependency: transitive
     description:
@@ -757,6 +781,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.3"
+  qr:
+    dependency: transitive
+    description:
+      name: qr
+      sha256: "64957a3930367bf97cc211a5af99551d630f2f4625e38af10edd6b19131b64b3"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.1"
+  rxdart:
+    dependency: transitive
+    description:
+      name: rxdart
+      sha256: "0c7c0cedd93788d996e33041ffecda924cc54389199cde4e6a34b440f50044cb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.27.7"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -890,6 +930,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  sync_scroll_controller:
+    dependency: transitive
+    description:
+      name: sync_scroll_controller
+      sha256: "4735b21cf5c5a6d44041b0668f8bf35b7db14e942019eef90099bc9f935bdabf"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   syncfusion_flutter_charts:
     dependency: "direct main"
     description:

@@ -1,4 +1,4 @@
 class Constants{
 
-  static const baseUrl='https://api.darkbaz.site';
+  static const baseUrl='https://panel.darkbaz.site';
 }

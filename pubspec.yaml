@@ -77,6 +77,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   native_notify: ^0.0.3
   auto_animated: ^3.2.0
+  pluto_grid: ^7.0.2
+  data_grid: ^0.1.0
+  pretty_qr_code: ^3.0.0
 
 dev_dependencies:
   flutter_test:

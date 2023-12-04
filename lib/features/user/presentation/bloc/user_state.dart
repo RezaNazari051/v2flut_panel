@@ -1,10 +1,14 @@
 part of 'user_bloc.dart';
 
-abstract class UserState extends Equatable {
-  const UserState();
+class UserState extends Equatable {
+  final GetUsersStatus usersStatus;
+
+  const UserState(this.usersStatus);
+
+  UserState copyWith({GetUsersStatus? newUserStatus}) {
+    return UserState( newUserStatus ?? usersStatus);
+  }
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [usersStatus];
 }
-
-class UserInitial extends UserState {}
